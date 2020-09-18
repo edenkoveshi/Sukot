@@ -4,27 +4,33 @@ import { NgModule } from '@angular/core';
 //Angular material imports
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon'
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from './dialog/dialog.component';
+import { MenuComponent,MenuDialog } from './menu/menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DialogComponent
+    DialogComponent,
+    MenuComponent,
+    MenuDialog
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MatDialogModule,
     MatButtonModule,
-    FormsModule, 
-    ReactiveFormsModule
+    MatButtonToggleModule,
+    MatCardModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  //entryComponents : [DialogComponent]
+  entryComponents : [MenuComponent,MenuDialog]
 })
 export class AppModule { }

@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>ביצוע הזמנה</h1>
+<mat-dialog-content dir="rtl" style="height: calc(100% - 96px);">
+    <mat-card-header>
+        <p>מספר סטים:</p>
+    </mat-card-header>
+    <mat-card-actions>
+        <p>כשרות:</p>
+        <mat-button-toggle-group name="kashrut" appearance="legacy">
+            <mat-button-toggle value="כשר">כשר</mat-button-toggle>
+            <mat-button-toggle value="מהודר">מהודר</mat-button-toggle>
+            <mat-button-toggle value="מהדרין">כשר למהדרין</mat-button-toggle>
+        </mat-button-toggle-group>
+        <!--<button mat-stroked-button color="primary">מהודר</button>
+        <button mat-stroked-button color="primary"> כשר למהדרין</button>
+        <button mat-stroked-button color="primary">כשר</button> -->
+    </mat-card-actions>
+    <br>
+    <button mat-button color="primary" style="width:100%"><mat-icon>add</mat-icon>אני רוצה עוד סטים</button>
+</mat-dialog-content>
+

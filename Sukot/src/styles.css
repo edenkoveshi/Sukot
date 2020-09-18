@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+/*@import '~@angular/material/prebuilt-themes/indigo-pink.css';*/
+/*@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';*/
 
-html, body { height: 100%; }
+html, body { height: 100%; text-align: right;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+div {text-align: right;}
+
+/*.mat-button-toggle {background-color:rgb(224, 235, 247);}
+.mat-button-toggle-checked {background-color:rgb(155, 178, 202);}*/

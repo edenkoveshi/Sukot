@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css']
 })
-export class DialogComponent implements OnInit {
+export class MenuComponent implements OnInit {
+
   constructor(public dialog: MatDialog) {}
 
   openDialog() {
-    const dialogRef = this.dialog.open(DialogMenu);
+    const dialogRef = this.dialog.open(MenuDialog);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -23,7 +24,7 @@ export class DialogComponent implements OnInit {
 }
 
 @Component({
-  selector: 'dialog-menu',
-  templateUrl: './dialog-menu.html',
+  selector: 'menu-dialog',
+  templateUrl: './menu-dialog.html',
 })
-export class DialogMenu {}
+export class MenuDialog {}
