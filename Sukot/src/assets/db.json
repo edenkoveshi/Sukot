@@ -1,0 +1,27 @@
+{
+    "productTypes": [
+        "Lulav",
+        "Ethrog",
+        "Hadas",
+        "Arava"
+    ],
+    "KashrutTypes":[
+        "Kosher",
+        "Mehadrin",
+        "Mehudar"
+    ],
+    "products":[
+        {
+            "type":"Ethrog",
+            "fullName":"אתרוגים חזון איש בכשרות הרב קרליץ"
+        },
+        {
+            "type":"Ethrog",
+            "fullName":"אתרוגים תימניים בכשרות הרב מחפוד"
+        },
+        {
+            "type":"Lulav",
+            "fullName":"אתרוגים תימניים בכשרות הרב מחפוד"
+        }
+    ]
+}
