@@ -1,27 +1,72 @@
 {
     "productTypes": [
-        "Lulav",
-        "Ethrog",
-        "Hadas",
-        "Arava"
+        "לולב",
+        "אתרוג",
+        "הדס",
+        "ערבה"
     ],
     "KashrutTypes":[
-        "Kosher",
-        "Mehadrin",
-        "Mehudar"
+        "כשר",
+        "מהודר",
+        "כשר למהדרין"
     ],
-    "products":[
-        {
-            "type":"Ethrog",
-            "fullName":"אתרוגים חזון איש בכשרות הרב קרליץ"
-        },
-        {
-            "type":"Ethrog",
-            "fullName":"אתרוגים תימניים בכשרות הרב מחפוד"
-        },
-        {
-            "type":"Lulav",
-            "fullName":"אתרוגים תימניים בכשרות הרב מחפוד"
-        }
-    ]
+    "products":
+        [
+            {
+                "type":"אתרוג",
+                "inSet":true,
+                "kinds":[
+                    {
+                        "name":"אתרוגים חזון איש בכשרות הרב קרליץ",
+                        "imageUrl":"ehtrog_hazon_ish_fruit.jpeg"
+                    },
+                    {
+                        "name":"אתרוגים תימניים בכשרות הרב מחפוד",
+                        "imageUrl":"ehtrog_temani_3.jpeg"
+                    }
+                ]
+            },
+            {
+                "type":"לולב",
+                "inSet":true,
+                "kinds":[
+                    {
+                        "name":"לולבי הבקעה דרי קורה בכשרות הרב ברנדסופר",
+                        "imageUrl":"lulav.jpeg"
+                    },
+                    {
+                        "name":"לולבי הבקעה דרי בכשרות הרב קליין",
+                        "imageUrl":"lulav_2.jpeg"
+                    }
+                ]
+            },
+            {
+                "type":"הדס",
+                "inSet":true,
+                "kinds":[
+                    {
+                        "name":"הדסים בכשרות הרב ברנדסופר",
+                        "imageUrl":"hadas_mehudar.jpeg"
+                    },
+                    {
+                        "name":"הדסים בכשרות הרב שמחה וויס",
+                        "imageUrl":"hadas_mehudar_2.jpeg"
+                    }
+                ]
+            },
+            {
+                "type":"ערבה",
+                "inSet":false,
+                "kinds":[
+                    {
+                        "name":"זוג ערבות בכשרות בדץ העדה החרדית",
+                        "imageUrl":""
+                    },
+                    {
+                        "name":"זוג ערבות בכשרות בדץ הבית יוסף",
+                        "imageUrl":""
+                    }
+                ]
+            }
+        ]
 }

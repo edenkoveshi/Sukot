@@ -1,20 +1,73 @@
-<h1 mat-dialog-title>ביצוע הזמנה</h1>
-<mat-dialog-content dir="rtl" style="height: calc(100% - 96px);">
-    <mat-card-header>
-        <p>מספר סטים:</p>
-    </mat-card-header>
-    <mat-card-actions>
-        <p>כשרות:</p>
-        <mat-button-toggle-group name="kashrut" appearance="legacy">
-            <mat-button-toggle value="כשר">כשר</mat-button-toggle>
-            <mat-button-toggle value="מהודר">מהודר</mat-button-toggle>
-            <mat-button-toggle value="מהדרין">כשר למהדרין</mat-button-toggle>
-        </mat-button-toggle-group>
-        <!--<button mat-stroked-button color="primary">מהודר</button>
-        <button mat-stroked-button color="primary"> כשר למהדרין</button>
-        <button mat-stroked-button color="primary">כשר</button> -->
-    </mat-card-actions>
-    <br>
-    <button mat-button color="primary" style="width:100%"><mat-icon>add</mat-icon>אני רוצה עוד סטים</button>
-</mat-dialog-content>
+<mat-horizontal-stepper #stepper dir="rtl">
+    <mat-step [editable]=true>
+            <ng-template matStepLabel>בחירת סטים</ng-template>
+            <mat-dialog-content dir="rtl" style="height: calc(100% - 96px);">
+            <app-menu-item *ngFor="let i of setsArr"></app-menu-item>
+            <br>
+            <button mat-button color="primary" style="width:100%" (click)="AddSet()"><mat-icon>add</mat-icon>אני רוצה עוד סטים (עם מרכיבים שונים)</button>
+            </mat-dialog-content>
+            <button mat-raised-button (click)="ValidateSetOrder()" color="primary">המשך</button>
+    </mat-step>
+    <mat-step [editable]=true>
+            <ng-template matStepLabel>בחירת ערבות</ng-template>
+            <div>
+                <mat-form-field>
+                    <p>{{AravotType1.name}}</p>
+                    <input matInput type="text" min="0" value="{{AravotType1.amount}}" (change)="changeNumAravot($event,1)" required [(formControl)]="positiveValue">
+                    <button mat-icon-button color="primary" (click)="AddAravot(1)"><mat-icon>add</mat-icon></button>
+                    <button mat-icon-button color="primary" (click)="RemoveAravot(1)"><mat-icon>remove</mat-icon></button>
+                </mat-form-field>
+                <mat-form-field>
+                    <p>{{AravotType2.name}}</p>
+                    <input matInput type="text" min="0" value="{{AravotType2.amount}}" (change)="changeNumAravot($event,2)" required [(formControl)]="positiveValue"> 
+                    <button mat-icon-button color="primary" (click)="AddAravot(2)"><mat-icon>add</mat-icon></button>
+                    <button mat-icon-button color="primary" (click)="RemoveAravot(2)"><mat-icon>remove</mat-icon></button>
+                </mat-form-field>
+            </div>
+            <button mat-raised-button matStepperPrevious>חזור</button>
+            <button mat-raised-button color="primary" (click)="GenerateSummary()">המשך</button>
+    </mat-step>
+    <mat-step [editable]=true>
+        <ng-template matStepLabel>סיכום ההזמנה</ng-template>
+        <div>
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width:100%">
+              
+                <!-- Item Column -->
+                <ng-container matColumnDef="item">
+                  <th mat-header-cell *matHeaderCellDef> מוצר </th>
+                  <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+                </ng-container>
+              
+                <!-- Amount Column -->
+                <ng-container matColumnDef="amount">
+                  <th mat-header-cell *matHeaderCellDef> כמות </th>
+                  <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+                </ng-container>
+              
+                <!-- PriceForEach Column -->
+                <ng-container matColumnDef="price_for_each">
+                  <th mat-header-cell *matHeaderCellDef> מחיר ליח' </th>
+                  <td mat-cell *matCellDef="let element"> {{element.priceForEach}} </td>
+                </ng-container>
+              
+                <!-- TotalPrice Column -->
+                <ng-container matColumnDef="total_price">
+                  <th mat-header-cell *matHeaderCellDef> מחיר כולל </th>
+                  <td mat-cell *matCellDef="let element"> {{element.totalPrice}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <!--<tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>-->
+              </table>
+        </div>
+        <button mat-raised-button matStepperPrevious>חזור</button>
+        <button mat-raised-button matStepperNext color="primary">המשך</button>
+    </mat-step>
+    <mat-step [editable]=true>
+        <ng-template matStepLabel>פרטי התקשרות</ng-template>
+        <button mat-raised-button matStepperPrevious>חזור</button>
+        <button mat-raised-button color="primary" matStepperNext>סיום</button>
+</mat-step>
+</mat-horizontal-stepper>
 

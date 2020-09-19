@@ -1,0 +1,25 @@
+<div class="set-container">
+    <mat-card-header>
+    <p>מספר סטים:</p>
+    <mat-form-field>
+        <input matInput type="text" [value]="numSets" (change)="changeNumSets($event)" required>
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="AddSet()"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button color="primary" (click)="RemoveSet()"><mat-icon>remove</mat-icon></button>
+    </mat-card-header>
+    <mat-card-actions>
+        <p>כשרות:</p><mat-button-toggle-group name="kashrut" appearance="legacy">
+            <mat-button-toggle *ngFor="let kashrut of this.db.KashrutTypes" value={{kashrut}} (change)="selectKashrut($event)">{{kashrut}}</mat-button-toggle>
+        </mat-button-toggle-group>
+        <br><br>
+    <mat-radio-group *ngFor="let product of db.products" id="select-{{product.type}}">
+        <div *ngIf="product.inSet">
+        <p>בחר {{product.type}}:</p>
+        <div *ngFor="let cur of product.kinds"> 
+        <mat-radio-button value="{{product.type}}:{{cur.name}}" color="primary" (change)="radioEvent($event)"><img src="../../assets/{{cur.imageUrl}}" style="width:100px;height:100px;">{{cur.name}}</mat-radio-button>
+        <br>
+            </div>
+        </div>
+    </mat-radio-group>
+    </mat-card-actions>
+</div>

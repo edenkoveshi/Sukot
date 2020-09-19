@@ -16,6 +16,12 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
     color: mat-color($primary, default-contrast);
   }
 
+  .set-container{
+    border: 1px;
+    border-color:mat-color($primary, default-contrast);;
+    border-style: outset;
+}
+
   /*.mat-button-toggle-checked {
     background-color: mat-color($accent);
     color: mat-color($accent, default-contrast);
