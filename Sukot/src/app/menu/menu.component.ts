@@ -5,7 +5,7 @@ import { ViewChild } from '@angular/core'
 import db from '../../assets/db.json';
 import { DataService, MinimSet } from '../data.service'
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient,HttpHeaders} from '@angular/common/http';
 import '../../assets/smtp.js'
 import smtp_settings from '../../assets/smtp_settings.json';
 declare let Email: any;
@@ -293,26 +293,72 @@ export class MenuDialog implements OnInit {
         body += data.item + "*" + data.amount + " - " + data.totalPrice + "שח" + "<br>";
       }
 
-      function getRandomNumberBetween(min,max){
-        return Math.floor(Math.random()*(max-min+1)+min);
+      body += "סהכ:   " + this.getTotalCost();
+
+      function getRandomNumber(max){
+        return Math.floor(Math.random()*Math.floor(max));
       }
 
-      let r:number = getRandomNumberBetween(0,smtp_settings.smtpServers.length);
+      let r:number = getRandomNumber(smtp_settings.smtpServers.length);
+      //r = 1;
       
-      Email.send({
-          Host : smtp_settings.smtpServers[r].server,
-          Username : smtp_settings.smtpServers[r].username,
-          Password : smtp_settings.smtpServers[r].password,
-          To : smtp_settings.targetServer,
-          From : smtp_settings.smtpServers[r].username,
-          Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
-          Body : body,
-          }).then( (message) => {
-            //console.log("message");
-            if(message != "OK"){
-              this.sendMailWithContactDetails();
-            }
-            //sleep(1000);
+      let settings = smtp_settings.smtpServers[r]
+      if(settings.provider == "elastic"){
+        Email.send({
+            Host : settings.server,
+            Username : settings.username,
+            Password : settings.password,
+            To : smtp_settings.targetAddress,
+            From : settings.username,
+            Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
+            Body : body,
+            }).then( (message) => {
+              console.log(typeof(message));
+              console.log(message);
+              console.log(settings.username);
+              /*if(message != "OK"){
+                this.sendMailWithContactDetails();
+              }*/
+              //sleep(1000);
+              this.processing = false;
+              this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
+                duration: 10000,
+                direction: 'rtl'
+              });
+              this.dataService.setDialogClose(true);
+            });
+        }
+        else if(settings.provider == "sendgrid"){
+          let httpOptions = {
+            headers: new HttpHeaders({
+              'Content-Type':  'application/json',
+              Authorization: 'Bearer ' + settings.password
+            })};
+
+            let mail = {
+              "personalizations": [
+                {
+                  "to": [
+                    {
+                      "email": smtp_settings.targetAddress
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "email": smtp_settings.smtpServers
+              },
+              "subject": "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
+              "content": [
+                {
+                  "type": "text/plain",
+                   "value": body
+                  }
+                ]
+              }
+            
+          this.http.post(settings.server,mail,httpOptions).subscribe(data => {
+            console.log(data);
             this.processing = false;
             this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
               duration: 10000,
@@ -320,5 +366,6 @@ export class MenuDialog implements OnInit {
             });
             this.dataService.setDialogClose(true);
           });
+        }
     }
 }

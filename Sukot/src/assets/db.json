@@ -27,11 +27,11 @@
                 "kinds":[
                     {
                         "name":"אתרוגים חזון איש בכשרות הרב קרליץ",
-                        "imageUrl":"ehtrog_hazon_ish_fruit.jpeg"
+                        "imageUrl":"images\\ehtrog_hazon_ish_fruit.jpeg"
                     },
                     {
                         "name":"אתרוגים תימניים בכשרות הרב מחפוד",
-                        "imageUrl":"ehtrog_temani_3.jpeg"
+                        "imageUrl":"images\\ehtrog_temani_3.jpeg"
                     }
                 ]
             },
@@ -41,11 +41,11 @@
                 "kinds":[
                     {
                         "name":"לולבי הבקעה דרי קורה בכשרות הרב ברנדסופר",
-                        "imageUrl":"lulav.jpeg"
+                        "imageUrl":"images\\lulav.jpeg"
                     },
                     {
                         "name":"לולבי הבקעה דרי בכשרות הרב קליין",
-                        "imageUrl":"lulav_2.jpeg"
+                        "imageUrl":"images\\lulav_2.jpeg"
                     }
                 ]
             },
@@ -55,11 +55,11 @@
                 "kinds":[
                     {
                         "name":"הדסים בכשרות הרב ברנדסופר",
-                        "imageUrl":"hadas_mehudar.jpeg"
+                        "imageUrl":"images\\hadas_mehudar.jpeg"
                     },
                     {
                         "name":"הדסים בכשרות הרב שמחה וויס",
-                        "imageUrl":"hadas_mehudar_2.jpeg"
+                        "imageUrl":"images\\hadas_mehudar_2.jpeg"
                     }
                 ]
             },
