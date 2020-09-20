@@ -73,37 +73,37 @@
         <div *ngIf="!processing">
           <mat-form-field>
             <mat-label>שם פרטי</mat-label>
-            <input matInput type="text" value="{{contactDetails.firstName}}" (change)="changeContactDetails($event,'firstName')" required>
+            <input matInput type="text" value="{{contactDetails.firstName}}" (change)="changeContactDetails($event,'firstName')" ngModel required pattern="[א-ת ']*">
           </mat-form-field>
           &nbsp;
           <mat-form-field>
             <mat-label>שם משפחה</mat-label>
-            <input matInput type="text" value="{{contactDetails.lastName}}" (change)="changeContactDetails($event,'lastName')" required>
+            <input matInput type="text" value="{{contactDetails.lastName}}" (change)="changeContactDetails($event,'lastName')" required pattern="[א-ת ']*">
           </mat-form-field>
           <br>
           <mat-form-field>
             <mat-label>שכונה</mat-label>
-            <input matInput type="text" value="{{contactDetails.neighborhood}}" (change)="changeContactDetails($event,'neighborhood')" required>
+            <input matInput type="text" value="{{contactDetails.neighborhood}}" (change)="changeContactDetails($event,'neighborhood')" required pattern="[א-ת'][א-ת ']*">
           </mat-form-field>
           &nbsp;
           <mat-form-field>
             <mat-label>רחוב</mat-label>
-            <input matInput type="text" value="{{contactDetails.street}}" (change)="changeContactDetails($event,'street')" required>
+            <input matInput type="text" value="{{contactDetails.street}}" (change)="changeContactDetails($event,'street')" required  pattern="[א-ת'][א-ת ']*">
           </mat-form-field>
           <br>
           <mat-form-field>
             <mat-label>מספר בית</mat-label>
-            <input matInput type="number" value="{{contactDetails.houseNo}}" (change)="changeContactDetails($event,'houseNo')" required>
+            <input matInput type="number" value="{{contactDetails.houseNo}}" (change)="changeContactDetails($event,'houseNo')" required pattern="[0-9]*">
           </mat-form-field>
           &nbsp;
           <mat-form-field>
             <mat-label>כניסה (אם יש)</mat-label>
-            <input matInput type="text" value="{{contactDetails.buildingEntrance}}" (change)="changeContactDetails($event,'buildingEntrance')">
+            <input matInput type="text" value="{{contactDetails.buildingEntrance}}" (change)="changeContactDetails($event,'buildingEntrance')" pattern="[א-ת']">
           </mat-form-field>
           &nbsp;
           <mat-form-field>
             <mat-label>מספר דירה</mat-label>
-            <input matInput type="number" value="{{contactDetails.aptNo}}" (change)="changeContactDetails($event,'aptNo')" required>
+            <input matInput type="number" value="{{contactDetails.aptNo}}" (change)="changeContactDetails($event,'aptNo')" required pattern="[0-9]*">
           </mat-form-field>
           <br>
           <mat-form-field>

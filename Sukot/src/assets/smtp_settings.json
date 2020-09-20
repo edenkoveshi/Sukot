@@ -1,6 +1,11 @@
 {
-    "server":"smtp.elasticemail.com",
-    "username":"4minimsukot@gmail.com",
-    "password":"A93382A51DBD35693438B8E48DF4C1CCA60A",
-    "port":"2525"
+    "smtpServers":[
+        {
+            "server":"smtp.elasticemail.com",
+            "username":"4minimsukot@gmail.com",
+            "password":"A93382A51DBD35693438B8E48DF4C1CCA60A",
+            "port":"2525"
+        }
+    ],
+    "targetServer":"4minimsukot@gmail.com"
 }
