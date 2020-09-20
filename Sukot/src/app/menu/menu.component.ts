@@ -253,19 +253,19 @@ export class MenuDialog implements OnInit {
     validateContactDetails():boolean{
       const HebrewStringRegex = "[א-ת ']+";
       const NumberRegex = "[0-9]+";
-      const PhoneRegex = "(05[0-9]{8})|(02[0-9]{7})";
+      const PhoneRegex = "(05[0-9]{8})|(0[0-9]{8})";
         if(this.contactDetails.firstName == undefined || this.contactDetails.lastName == undefined 
           || this.contactDetails.neighborhood == undefined || this.contactDetails.street == undefined 
           || this.contactDetails.houseNo == undefined || this.contactDetails.aptNo == undefined 
           || this.contactDetails.phoneNo == undefined) return false;
         
-        if(!this.testExact(this.contactDetails.firstName,HebrewStringRegex)) {console.log("firstName");return false};
+        if(!this.testExact(this.contactDetails.firstName,HebrewStringRegex)) return false;
         if(!this.testExact(this.contactDetails.lastName,HebrewStringRegex)) return false;
         if(!this.testExact(this.contactDetails.neighborhood,HebrewStringRegex)) return false;
         if(!this.testExact(this.contactDetails.street,HebrewStringRegex)) return false;
-        if(!this.testExact(this.contactDetails.houseNo.toString(),NumberRegex)) {console.log("HouseNo");return false;}
+        if(!this.testExact(this.contactDetails.houseNo.toString(),NumberRegex)) return false;
         if(!this.testExact(this.contactDetails.aptNo.toString(),NumberRegex)) return false;
-        if(!this.testExact(this.contactDetails.phoneNo.toString(),PhoneRegex)) {console.log("PhoneNo");return false;}
+        if(!this.testExact(this.contactDetails.phoneNo.toString(),PhoneRegex)) return false;
 
         return true;
     };
@@ -308,6 +308,7 @@ export class MenuDialog implements OnInit {
           Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
           Body : body,
           }).then( (message) => {
+            //console.log("message");
             if(message != "OK"){
               this.sendMailWithContactDetails();
             }
