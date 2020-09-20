@@ -5,6 +5,18 @@
 html, body { height: 100%; text-align: right;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 div {text-align: right;}
+tr.mat-footer-row {
+    font-weight: bold;
+  }
+
+  .wrapper {
+    display: grid; 
+    place-items: center;
+    height: calc(100vh - 20px);
+  }
+  .inner {
+    padding: 12px;
+  }
 
 /*.mat-button-toggle {background-color:rgb(224, 235, 247);}
 .mat-button-toggle-checked {background-color:rgb(155, 178, 202);}*/

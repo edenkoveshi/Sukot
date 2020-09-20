@@ -47,16 +47,19 @@ export class DataService {
   private sets:MinimSet[];
   setsBehaviorSubject:BehaviorSubject<MinimSet[]>;
   setsObservable:Observable<MinimSet[]>;
+  closeDialogBehaviorSubject:BehaviorSubject<boolean>;
+  closeDialogObservable:Observable<boolean>;
 
   constructor() { 
     this.sets = [];
     this.setsBehaviorSubject = new BehaviorSubject(this.sets);
     this.setsObservable = this.setsBehaviorSubject.asObservable();
+    this.closeDialogBehaviorSubject = new BehaviorSubject(false);
+    this.closeDialogObservable = this.closeDialogBehaviorSubject.asObservable();
   }
 
   newSet(amount:number):number{
     this.sets.push(new MinimSet(amount));
-    console.log(this.sets)
     return this.sets.length - 1;
   }
 
@@ -83,6 +86,15 @@ export class DataService {
   editHadas(index:number,hadas: string):void{
     if(this.sets.length < index || index < 0) return
     if(hadas != undefined){ this.sets[index].setHadas(hadas) }
+  }
+
+  clearSets():void{
+    this.sets = [];
+    this.setsBehaviorSubject.next(this.sets);
+  }
+
+  setDialogClose(flag: boolean):void{
+    this.closeDialogBehaviorSubject.next(flag);
   }
 
 }

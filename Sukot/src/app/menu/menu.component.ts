@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import { MenuItemComponent } from '../menu-item/menu-item.component';
 import {FormControl , Validators} from '@angular/forms';
 import { ViewChild } from '@angular/core'
 import db from '../../assets/db.json';
 import { DataService, MinimSet } from '../data.service'
-import { resourceUsage } from 'process';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {HttpClient} from '@angular/common/http';
+import '../../assets/smtp.js'
+import smtp_settings from '../../assets/smtp_settings.json';
+declare let Email: any;
 
 const ARAVOT_PRICE:number = 5;
 
@@ -15,7 +18,7 @@ const ARAVOT_PRICE:number = 5;
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog,private dataService:DataService) {}
 
   openDialog() {
     const dialogRef = this.dialog.open(MenuDialog,{
@@ -23,7 +26,15 @@ export class MenuComponent implements OnInit {
    });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.dataService.clearSets();
       console.log(`Dialog result: ${result}`);
+    });
+
+    this.dataService.closeDialogObservable.subscribe(flag => {
+      if(flag){
+        dialogRef.close();
+        this.dataService.setDialogClose(false);
+      }
     });
   }
 
@@ -47,6 +58,20 @@ export class SoldItem {
   }
 }
 
+export class ContactDetails{
+  firstName: string;
+  lastName: string;
+  neighborhood: string;
+  street: string;
+  houseNo: number;
+  buildingEntrance: string;
+  aptNo: number;
+  phoneNo:number;
+
+  constructor(){
+  }
+}
+
 @Component({
   selector: 'menu-dialog',
   templateUrl: './menu-dialog.html',
@@ -62,9 +87,12 @@ export class MenuDialog implements OnInit {
   setsArr: number[]; //Helps implementing the "more sets" feature
   allSets:MinimSet[];
   parsedSets:SoldItem[];
+  contactDetails:ContactDetails;
+  processing: boolean;
 
 
-    constructor(private dataService:DataService){
+    constructor(private dataService:DataService,private _snackBar: MatSnackBar,
+      private http: HttpClient){
       this.dataService.setsObservable.subscribe(sets => {
         this.allSets = sets;
       })
@@ -83,6 +111,8 @@ export class MenuDialog implements OnInit {
       this.dataSource = [];
       this.positiveValue = new FormControl("", [Validators.min(0)])
       this.parsedSets = [];
+      this.contactDetails = new ContactDetails();
+      this.processing = false;
     }
 
     AddSet():void{
@@ -144,7 +174,25 @@ export class MenuDialog implements OnInit {
     CalculateSetCost(set: MinimSet):SoldItem[]{
       let result:SoldItem[] = []; //Should have 4 elements
       let temp:[number,string] = this.GetSetCostAndName(set.kashrut);
-      if(set.Ethrog=="" || set.Lulav == "" || set.Hadas == "") return null;
+      if(set.Ethrog == ""){
+        this._snackBar.open("עליך לבחור אתרוג", "אישור", {
+          duration: 1000,
+        });
+        return null;
+      }
+      if(set.Lulav == ""){
+        this._snackBar.open("עליך לבחור לולב", "אישור", {
+          duration: 1000,
+        });
+        return null;
+      }
+      if(set.Hadas == ""){
+        this._snackBar.open("עליך לבחור הדס", "אישור", {
+          duration: 1000,
+        });
+        return null;
+      }
+      
       if(temp){
         let name:string = temp[1];
         let price:number = temp[0];
@@ -154,10 +202,13 @@ export class MenuDialog implements OnInit {
         result.push(new SoldItem(set.Hadas,set.amount,0));
         return result;
       }
+      this._snackBar.open("עליך לבחור כשרות", "אישור", {
+        duration: 1000,
+      });
       return null;
     }
 
-    CalculateAllSetCosts():boolean{
+    CalculateAllSetCosts():void{
       this.parsedSets = [];
       for(let set of this.allSets){
         let items = this.CalculateSetCost(set);
@@ -168,11 +219,10 @@ export class MenuDialog implements OnInit {
         }
         else{
           console.log("failed calculating set");
-          return false;
+          return;
         }
       }
       this.stepper.next();
-      return true;
     }
 
     GenerateSummary():boolean{
@@ -184,5 +234,67 @@ export class MenuDialog implements OnInit {
         this.dataSource.push(new SoldItem(this.AravotType2.name,this.AravotType2.amount,ARAVOT_PRICE));
       this.stepper.next();
       return true;
+    }
+
+    getTotalCost():number{
+      return this.dataSource.map(t=>t.totalPrice).reduce((acc, value) => acc + value, 0);
+    }
+
+    changeContactDetails(change:any,field:string):void{
+      let val = change.target.value;
+      this.contactDetails[field] = val;
+    }
+
+    validateContactDetails():boolean{
+        return (this.contactDetails.firstName != undefined && this.contactDetails.lastName != undefined 
+          && this.contactDetails.neighborhood != undefined && this.contactDetails.street != undefined 
+          && this.contactDetails.houseNo != undefined && this.contactDetails.aptNo != undefined 
+          && this.contactDetails.phoneNo != undefined)
+    };
+
+    async sendMailWithContactDetails():Promise<any>{
+      if(!this.validateContactDetails()){
+        this._snackBar.open("עליך למלא את כל הפרטים", "אישור", {
+          duration: 1000,
+        });
+        return;
+      };
+
+      this.processing = true;
+      this.stepper.next();
+
+      let body:string = "פרטי המזמין:\n"
+      + "שם: " + this.contactDetails.firstName + " " + this.contactDetails.lastName + "<br>"
+      + "כתובת: " + this.contactDetails.street + " " + this.contactDetails.houseNo + " "
+      + (this.contactDetails.buildingEntrance != undefined ? ("כניסה " + this.contactDetails.buildingEntrance) : "")
+      + ",דירה " + this.contactDetails.aptNo  + "<br>"
+      + "מספר טלפון: " + this.contactDetails.phoneNo + "<br>";
+
+      for(let data of this.dataSource){
+        body += data.item + "*" + data.amount + " - " + data.totalPrice + "שח" + "<br>";
+      }
+
+      function sleep(ms: number) {
+        return new Promise( resolve => setTimeout(resolve, ms) );
+      }
+
+      
+      Email.send({
+          Host : smtp_settings.server,
+          Username : smtp_settings.username,
+          Password : smtp_settings.password,
+          To : smtp_settings.username,
+          From : smtp_settings.username,
+          Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
+          Body : body,
+          }).then( () => {
+            //sleep(1000);
+            this.processing = false;
+            this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
+              duration: 10000,
+              direction: 'rtl'
+            });
+            this.dataService.setDialogClose(true);
+          });
     }
 }
