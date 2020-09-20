@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import db from '../../assets/db.json';
+import {DataService} from '../data.service'
 
 @Component({
   selector: 'app-menu-item',
@@ -9,18 +10,20 @@ import db from '../../assets/db.json';
 export class MenuItemComponent implements OnInit {
 
   db = db;
-  numSets: number;
+  amount: number;
   kashrut:string;
   selectedEthrog:string;
   selectedLulav:string;
   selectedHadas:string;
+  setIndex: number;
 
-  constructor() { 
+  constructor(private dataService:DataService) { 
     this.kashrut = "";
     this.selectedEthrog = "";
     this.selectedHadas = "";
     this.selectedLulav = "";
-    this.numSets = 1;
+    this.amount = 1;
+    this.setIndex = this.dataService.newSet(this.amount);
   }
 
   ngOnInit(): void {
@@ -28,18 +31,22 @@ export class MenuItemComponent implements OnInit {
 
   selectKashrut(change:any) : void{
     this.kashrut = change.value;
+    this.dataService.editKashrut(this.setIndex,this.kashrut);
   }
 
   selectEthrog(val:string) : void{
     this.selectedEthrog = val;
+    this.dataService.editEthrog(this.setIndex,this.selectedEthrog);
   }
 
   selectHadas(val:string) : void{
     this.selectedHadas = val;
+    this.dataService.editHadas(this.setIndex,this.selectedHadas)
   }
 
   selectLulav(val:string) : void{
     this.selectedLulav = val;
+    this.dataService.editLulav(this.setIndex,this.selectedLulav)
   }
 
   radioEvent(change: any){
@@ -51,17 +58,22 @@ export class MenuItemComponent implements OnInit {
     else if(type === "הדס"){this.selectHadas(val)}
   }
 
-  changeNumSets(change:any) : void{
-    this.numSets = change.target.value;
+  changeAmount(change:any) : void{
+    this.amount = change.target.value;
+    this.dataService.editAmount(this.setIndex,this.amount);
   }
 
 
   AddSet():void{
-    this.numSets++;
+    this.amount++;
+    this.dataService.editAmount(this.setIndex,this.amount);
   }
 
   RemoveSet():void{
-    if(this.numSets > 1)this.numSets--;
+    if(this.amount > 1){
+      this.amount--;
+      this.dataService.editAmount(this.setIndex,this.amount);
+    }
   }
 
   

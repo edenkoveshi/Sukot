@@ -2,14 +2,14 @@
     <mat-card-header>
     <p>מספר סטים:</p>
     <mat-form-field>
-        <input matInput type="text" [value]="numSets" (change)="changeNumSets($event)" required>
+        <input matInput type="text" [value]="amount" (change)="changeAmount($event)" required>
     </mat-form-field>
     <button mat-icon-button color="primary" (click)="AddSet()"><mat-icon>add</mat-icon></button>
     <button mat-icon-button color="primary" (click)="RemoveSet()"><mat-icon>remove</mat-icon></button>
     </mat-card-header>
     <mat-card-actions>
         <p>כשרות:</p><mat-button-toggle-group name="kashrut" appearance="legacy">
-            <mat-button-toggle *ngFor="let kashrut of this.db.KashrutTypes" value={{kashrut}} (change)="selectKashrut($event)">{{kashrut}}</mat-button-toggle>
+            <mat-button-toggle *ngFor="let kashrut of this.db.KashrutTypes" value={{kashrut.type}} (change)="selectKashrut($event)">{{kashrut.type}}</mat-button-toggle>
         </mat-button-toggle-group>
         <br><br>
     <mat-radio-group *ngFor="let product of db.products" id="select-{{product.type}}">

@@ -4,6 +4,8 @@ import { MenuItemComponent } from '../menu-item/menu-item.component';
 import {FormControl , Validators} from '@angular/forms';
 import { ViewChild } from '@angular/core'
 import db from '../../assets/db.json';
+import { DataService, MinimSet } from '../data.service'
+import { resourceUsage } from 'process';
 
 const ARAVOT_PRICE:number = 5;
 
@@ -16,7 +18,9 @@ export class MenuComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   openDialog() {
-    const dialogRef = this.dialog.open(MenuDialog);
+    const dialogRef = this.dialog.open(MenuDialog,{
+      height: '100%'
+   });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -56,9 +60,14 @@ export class MenuDialog implements OnInit {
   AravotType2 : any;
   positiveValue : FormControl;
   setsArr: number[]; //Helps implementing the "more sets" feature
+  allSets:MinimSet[];
+  parsedSets:SoldItem[];
 
 
-    constructor(){
+    constructor(private dataService:DataService){
+      this.dataService.setsObservable.subscribe(sets => {
+        this.allSets = sets;
+      })
     }
 
     ngOnInit(): void {
@@ -73,18 +82,14 @@ export class MenuDialog implements OnInit {
       }
       this.dataSource = [];
       this.positiveValue = new FormControl("", [Validators.min(0)])
+      this.parsedSets = [];
     }
 
     AddSet():void{
       this.setsArr.push(1);
     }
 
-    ValidateSetOrder():void{
-      this.stepper.next();
-    }
-
     AddAravot(type:number):void{
-      console.log(type);
       switch(type){
         case 1:
           this.AravotType1.amount++;
@@ -117,12 +122,67 @@ export class MenuDialog implements OnInit {
       
     }
 
-    GenerateSummary():void{
+    GetSetCostAndName(kashrut: string):[number,string]{
+      let name:string = "";
+      let price:number = 0;
+
+      function FilterByKashrut(kashrut:string):(element:any)=>boolean{
+        return function(element:any):boolean{
+          return element.type == kashrut;
+        }
+      }
+
+      let res = db.KashrutTypes.filter(FilterByKashrut(kashrut))[0]
+      if(res){
+        name = "סט "+res.type;
+        price = res.price;
+        return [price,name];
+      }
+      return null;
+    }
+
+    CalculateSetCost(set: MinimSet):SoldItem[]{
+      let result:SoldItem[] = []; //Should have 4 elements
+      let temp:[number,string] = this.GetSetCostAndName(set.kashrut);
+      if(set.Ethrog=="" || set.Lulav == "" || set.Hadas == "") return null;
+      if(temp){
+        let name:string = temp[1];
+        let price:number = temp[0];
+        result.push(new SoldItem(name,set.amount,price));
+        result.push(new SoldItem(set.Ethrog,set.amount,0));
+        result.push(new SoldItem(set.Lulav,set.amount,0));
+        result.push(new SoldItem(set.Hadas,set.amount,0));
+        return result;
+      }
+      return null;
+    }
+
+    CalculateAllSetCosts():boolean{
+      this.parsedSets = [];
+      for(let set of this.allSets){
+        let items = this.CalculateSetCost(set);
+        if(items){
+          for(let item of items){
+            this.parsedSets.push(item);
+          }
+        }
+        else{
+          console.log("failed calculating set");
+          return false;
+        }
+      }
+      this.stepper.next();
+      return true;
+    }
+
+    GenerateSummary():boolean{
       this.dataSource = []
+      for(let set of this.parsedSets){this.dataSource.push(set)};
       if(this.AravotType1.amount > 0)
         this.dataSource.push(new SoldItem(this.AravotType1.name,this.AravotType1.amount,ARAVOT_PRICE));
       if(this.AravotType2.amount > 0)
         this.dataSource.push(new SoldItem(this.AravotType2.name,this.AravotType2.amount,ARAVOT_PRICE));
       this.stepper.next();
+      return true;
     }
 }
