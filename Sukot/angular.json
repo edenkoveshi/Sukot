@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Sukot": {
+    "sukotminim": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -11,9 +11,9 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/Sukot",
+            "outputPath": "dist/sukotminim",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -21,14 +21,17 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/icon.ico"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "src/theme.scss"
             ],
-            "scripts": ["src/assets/smtp.js"]
+            "scripts": [
+              "src/assets/smtp.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -62,20 +65,21 @@
           }
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Sukot:build"
+            "browserTarget": "sukotminim:build",
+            "port": 80
           },
           "configurations": {
             "production": {
-              "browserTarget": "Sukot:build:production"
+              "browserTarget": "sukotminim:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Sukot:build"
+            "browserTarget": "sukotminim:build"
           }
         },
         "test": {
@@ -87,13 +91,13 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/icon.ico"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
-            "scripts": ["src/assets/smtp.js"]
+            "scripts": []
           }
         },
         "lint": {
@@ -113,16 +117,20 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Sukot:serve"
+            "devServerTarget": "sukotminim:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Sukot:serve:production"
+              "devServerTarget": "sukotminim:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }
   },
-  "defaultProject": "Sukot"
+  "defaultProject": "sukotminim"
 }

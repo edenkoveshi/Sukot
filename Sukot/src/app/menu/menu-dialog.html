@@ -1,6 +1,6 @@
 <mat-horizontal-stepper #stepper dir="rtl">
     <mat-step [editable]=true>
-            <ng-template matStepLabel>בחירת סטים</ng-template>
+            <ng-template matStepLabel *ngIf="!isMobile">בחירת סטים</ng-template>
             <mat-dialog-content dir="rtl" style="height: calc(100% - 96px);">
             <app-menu-item *ngFor="let i of setsArr"></app-menu-item>
             <br>
@@ -9,7 +9,7 @@
             <button mat-raised-button (click)="CalculateAllSetCosts()" color="primary">המשך</button>
     </mat-step>
     <mat-step [editable]=true>
-            <ng-template matStepLabel>בחירת ערבות</ng-template>
+            <ng-template matStepLabel *ngIf="!isMobile">ערבות וקוישיקלעך</ng-template>
             <div>
                 <mat-form-field>
                     <p>{{AravotType1.name}}</p>
@@ -17,6 +17,7 @@
                     <button mat-icon-button color="primary" (click)="AddAravot(1)"><mat-icon>add</mat-icon></button>
                     <button mat-icon-button color="primary" (click)="RemoveAravot(1)"><mat-icon>remove</mat-icon></button>
                 </mat-form-field>
+                <br>
                 <mat-form-field>
                     <p>{{AravotType2.name}}</p>
                     <input matInput type="text" min="0" value="{{AravotType2.amount}}" (change)="changeNumAravot($event,2)" [(formControl)]="positiveValue"> 
@@ -28,7 +29,7 @@
             <button mat-raised-button color="primary" (click)="GenerateSummary()">המשך</button>
     </mat-step>
     <mat-step [editable]=true>
-        <ng-template matStepLabel>סיכום ההזמנה</ng-template>
+        <ng-template matStepLabel *ngIf="!isMobile">סיכום ההזמנה</ng-template>
         <div>
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width:100%">
               
@@ -69,7 +70,7 @@
         <button mat-raised-button matStepperNext color="primary">המשך</button>
     </mat-step>
     <mat-step [editable]=true>
-        <ng-template matStepLabel>פרטי התקשרות</ng-template>
+        <ng-template matStepLabel *ngIf="!isMobile">פרטי התקשרות</ng-template>
         <div *ngIf="!processing">
           <mat-form-field>
             <mat-label>שם פרטי</mat-label>
@@ -82,8 +83,8 @@
           </mat-form-field>
           <br>
           <mat-form-field>
-            <mat-label>שכונה</mat-label>
-            <input matInput type="text" value="{{contactDetails.neighborhood}}" (change)="changeContactDetails($event,'neighborhood')" required pattern="[א-ת'][א-ת ']*">
+            <mat-label>עיר</mat-label>
+            <input matInput type="text" value="{{contactDetails.city}}" (change)="changeContactDetails($event,'city')" required pattern="[א-ת'][א-ת ']*">
           </mat-form-field>
           &nbsp;
           <mat-form-field>

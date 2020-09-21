@@ -16,7 +16,7 @@
         <div *ngIf="product.inSet">
         <p>בחר {{product.type}}:</p>
         <div *ngFor="let cur of product.kinds"> 
-        <mat-radio-button value="{{product.type}}:{{cur.name}}" color="primary" (change)="radioEvent($event)"><img src="../../assets/{{cur.imageUrl}}" style="width:100px;height:100px;">{{cur.name}}</mat-radio-button>
+        <mat-radio-button value="{{product.type}}:{{cur.name}}" color="primary" (change)="radioEvent($event)" style="white-space: pre-line;"><img src="../../assets/{{cur.imageUrl}}" style="width:min(100px,15vw);height:min(100px,15vw);">{{cur.name}}</mat-radio-button>
         <br>
             </div>
         </div>

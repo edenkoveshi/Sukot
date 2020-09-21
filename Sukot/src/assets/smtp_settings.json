@@ -1,19 +1,7 @@
 {
-    "smtpServers":[
-        {
-            "provider":"elastic",
-            "server":"smtp.elasticemail.com",
-            "username":"4minimsukot@gmail.com",
-            "password":"500EF553861F07562A7AC20C2151D52AD296",
-            "port":"2525"
-        },
-        {
-            "provider":"sendgrid",
-            "server":"https://api.sendgrid.com/v3/mail/send",
-            "username":"apikey",
-            "password":"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",
-            "port":"587"
-        }
-    ],
+    "server":"smtp.elasticemail.com",
+    "username":"4minimsukot@gmail.com",
+    "password":"4C3E052D6D322BB54990EEC97CCC89B0BF5E",
+    "port":"2525",
     "targetAddress":"4minimsukot@gmail.com"
 }

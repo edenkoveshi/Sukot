@@ -3,19 +3,22 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-<div dir="rtl" [ngStyle]="{background: 'url(./assets/images/background.jpeg)',height:'100%','background-size': '100%' }" >
-    <h1>ארבעת המינים עד הבית!</h1>
-    <h2>חוגגים את חג הסוכות גם בזמן הקורונה, מבלי לצאת מהבית!</h2>
-    <h3>סטים כשרים ומהודרים של ארבעת המינים, עם מגוון סוגי כשרויות והידורים מגיעים עד הבית שלכם!</h3>
-    <h2>אז איך זה עובד?</h2>
-    <h3>לוחצים על הכפתור מטה ומזמינים סט בהתאם להעדפות הכשרות שלכם, המורכב מאתרוג,לולב והדס </h3>
-    <h3>לאחר מכן מוסיפים מספר ערבות כרצונכם</h3>
-    <h3>בסיום ההזמנה, מזינים פרטי התקשרות וכתובת מגורים. שליח שלנו יצור אתכם קשר ויתאם אתכם את המשלוח.</h3>
-    <h2>מחירים</h2>
-    <h3>סט כשר - 70 ש"ח</h3>
-    <h3>סט מהודר - 90 ש"ח</h3>
-    <h3>סט מהדרין - 110 ש"ח</h3>
-    <h3>זוג ערבות - 5 ש"ח</h3>
-    <h3>*תשלום במזומן בעת קבלת המשלוח</h3>
+<div dir="rtl" class="background"><!-- [ngStyle]="{background: isMobile? mobileBg : desktopBg ,height:'100%','background-size': 'cover', 'width':'100%'  }" >-->
+    <h2>ארבעת המינים עד הבית!</h2>
+    <h3>חוגגים את חג הסוכות גם בזמן הקורונה, מבלי לצאת מהבית!</h3>
+    <p>סטים כשרים ומהודרים של ארבעת המינים, עם מגוון סוגי כשרויות והידורים מגיעים עד הבית שלכם!</p>
+    <h3 class="special-title">אז איך זה עובד?</h3>
+    <p>לוחצים על הכפתור מטה ומזמינים סט בהתאם להעדפות הכשרות שלכם, המורכב מאתרוג,לולב והדס </p>
+    <p>לאחר מכן מוסיפים מספר ערבות כרצונכם</p>
+    <p>בסיום ההזמנה, מזינים פרטי התקשרות וכתובת מגורים. שליח שלנו יצור אתכם קשר ויתאם אתכם את המשלוח.</p>
+    <h3 class="special-title">מחירים</h3>
+    <h3>סט כשר - 80 ש"ח</h3>
+    <h3>סט מהודר - 100 ש"ח</h3>
+    <h3>סט מהדרין - 120 ש"ח</h3>
+    <h3>זוג ערבות/קוישיקלעך - 5 ש"ח</h3>
+    <h3 class="special-title">*תשלום במזומן בעת קבלת המשלוח</h3>
+    <br>
+    <div style="text-align: center;">
     <app-menu class="center-button"></app-menu>
+    </div>
 </div>

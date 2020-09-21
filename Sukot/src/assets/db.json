@@ -8,15 +8,15 @@
     "KashrutTypes":[
         {
             "type":"כשר",
-            "price":70
+            "price":80
         },
         {
             "type":"מהודר",
-            "price":90
+            "price":100
         },
         {
             "type":"כשר למהדרין",
-            "price":110
+            "price":120
         }
     ],
     "products":
@@ -72,7 +72,7 @@
                         "imageUrl":""
                     },
                     {
-                        "name":"זוג ערבות בכשרות בדץ הבית יוסף",
+                        "name":"קוישיקלעך",
                         "imageUrl":""
                     }
                 ]

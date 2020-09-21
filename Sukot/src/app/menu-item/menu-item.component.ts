@@ -16,6 +16,7 @@ export class MenuItemComponent implements OnInit {
   selectedLulav:string;
   selectedHadas:string;
   setIndex: number;
+  
 
   constructor(private dataService:DataService) { 
     this.kashrut = "";

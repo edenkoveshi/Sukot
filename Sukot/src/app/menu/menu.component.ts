@@ -18,11 +18,15 @@ const ARAVOT_PRICE:number = 5;
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
+  isMobile: boolean;
+
   constructor(public dialog: MatDialog,private dataService:DataService) {}
 
   openDialog() {
     const dialogRef = this.dialog.open(MenuDialog,{
-      height: '100%'
+      height: '100vw',
+      width: '100vw',
+      maxWidth: this.isMobile ? '100vw' : '80vw',
    });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -39,7 +43,8 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    let mobileRE = new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile");
+    this.isMobile = mobileRE.test(window.navigator.userAgent)
   }
 
 }
@@ -61,7 +66,7 @@ export class SoldItem {
 export class ContactDetails{
   firstName: string;
   lastName: string;
-  neighborhood: string;
+  city: string;
   street: string;
   houseNo: number;
   buildingEntrance: string;
@@ -89,7 +94,7 @@ export class MenuDialog implements OnInit {
   parsedSets:SoldItem[];
   contactDetails:ContactDetails;
   processing: boolean;
-
+  isMobile: boolean;
 
     constructor(private dataService:DataService,private _snackBar: MatSnackBar,
       private http: HttpClient){
@@ -105,7 +110,7 @@ export class MenuDialog implements OnInit {
         amount:0
       }
       this.AravotType2 = {
-        name:"זוג ערבות בכשרות בדץ הבית יוסף",
+        name:"קוישיקלעך",
         amount:0
       }
       this.dataSource = [];
@@ -113,6 +118,9 @@ export class MenuDialog implements OnInit {
       this.parsedSets = [];
       this.contactDetails = new ContactDetails();
       this.processing = false;
+
+      let mobileRE = new RegExp("Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile");
+      this.isMobile = mobileRE.test(window.navigator.userAgent)
     }
 
     AddSet():void{
@@ -250,31 +258,32 @@ export class MenuDialog implements OnInit {
         return match != null && str === match[0];
     }
 
-    validateContactDetails():boolean{
+    validateContactDetails():string{
       const HebrewStringRegex = "[א-ת ']+";
       const NumberRegex = "[0-9]+";
       const PhoneRegex = "(05[0-9]{8})|(0[0-9]{8})";
         if(this.contactDetails.firstName == undefined || this.contactDetails.lastName == undefined 
-          || this.contactDetails.neighborhood == undefined || this.contactDetails.street == undefined 
+          || this.contactDetails.city == undefined || this.contactDetails.street == undefined 
           || this.contactDetails.houseNo == undefined || this.contactDetails.aptNo == undefined 
-          || this.contactDetails.phoneNo == undefined) return false;
+          || this.contactDetails.phoneNo == undefined) return "עליך למלא את כל הפרטים";
         
-        if(!this.testExact(this.contactDetails.firstName,HebrewStringRegex)) return false;
-        if(!this.testExact(this.contactDetails.lastName,HebrewStringRegex)) return false;
-        if(!this.testExact(this.contactDetails.neighborhood,HebrewStringRegex)) return false;
-        if(!this.testExact(this.contactDetails.street,HebrewStringRegex)) return false;
-        if(!this.testExact(this.contactDetails.houseNo.toString(),NumberRegex)) return false;
-        if(!this.testExact(this.contactDetails.aptNo.toString(),NumberRegex)) return false;
-        if(!this.testExact(this.contactDetails.phoneNo.toString(),PhoneRegex)) return false;
+        if(!this.testExact(this.contactDetails.firstName,HebrewStringRegex)) return "שם פרטי שגוי";
+        if(!this.testExact(this.contactDetails.lastName,HebrewStringRegex)) return "שם משפחה שגוי";
+        if(!this.testExact(this.contactDetails.city,HebrewStringRegex)) return "עיר שגויה";
+        if(!this.testExact(this.contactDetails.street,HebrewStringRegex)) return "רחוב שגוי";
+        if(!this.testExact(this.contactDetails.houseNo.toString(),NumberRegex)) return "מס' בית שגוי";
+        if(!this.testExact(this.contactDetails.aptNo.toString(),NumberRegex)) return "מס' דירה שגוי";
+        if(!this.testExact(this.contactDetails.phoneNo.toString(),PhoneRegex)) return "מס' טלפון שגוי";
 
-        return true;
+        return null;
     };
 
     async sendMailWithContactDetails():Promise<any>{
       this.processing = true;
-      if(!this.validateContactDetails()){
+      let msg:string = this.validateContactDetails()
+      if(msg){
         this.processing = false;
-        this._snackBar.open("עליך למלא את כל הפרטים", "אישור", {
+        this._snackBar.open(msg, "אישור", {
           duration: 1000,
         });
         return;
@@ -282,11 +291,11 @@ export class MenuDialog implements OnInit {
 
       this.stepper.next();
 
-      let body:string = "פרטי המזמין:\n"
+      let body:string = "פרטי המזמין:<br>"
       + "שם: " + this.contactDetails.firstName + " " + this.contactDetails.lastName + "<br>"
       + "כתובת: " + this.contactDetails.street + " " + this.contactDetails.houseNo + " "
       + (this.contactDetails.buildingEntrance != undefined ? ("כניסה " + this.contactDetails.buildingEntrance) : "")
-      + ",דירה " + this.contactDetails.aptNo  + "<br>"
+      + ",דירה " + this.contactDetails.aptNo  + " ," + this.contactDetails.city + "<br>" 
       + "מספר טלפון: " + this.contactDetails.phoneNo + "<br>";
 
       for(let data of this.dataSource){
@@ -295,77 +304,33 @@ export class MenuDialog implements OnInit {
 
       body += "סהכ:   " + this.getTotalCost();
 
-      function getRandomNumber(max){
-        return Math.floor(Math.random()*Math.floor(max));
-      }
-
-      let r:number = getRandomNumber(smtp_settings.smtpServers.length);
-      //r = 1;
-      
-      let settings = smtp_settings.smtpServers[r]
-      if(settings.provider == "elastic"){
         Email.send({
-            Host : settings.server,
-            Username : settings.username,
-            Password : settings.password,
+            Host : smtp_settings.server,
+            Username : smtp_settings.username,
+            Password : smtp_settings.password,
             To : smtp_settings.targetAddress,
-            From : settings.username,
+            From : smtp_settings.username,
             Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
             Body : body,
             }).then( (message) => {
-              console.log(typeof(message));
               console.log(message);
-              console.log(settings.username);
-              /*if(message != "OK"){
-                this.sendMailWithContactDetails();
-              }*/
-              //sleep(1000);
+              if(message != "OK"){
+                this._snackBar.open("אירעה שגיאה. אנא נסו שוב מאוחר יותר.", "", {
+                  duration: 10000,
+                  direction: 'rtl'
+                });
+              }
+              else{
+                this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
+                  duration: 10000,
+                  direction: 'rtl'
+                });
+                
+              }
               this.processing = false;
-              this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
-                duration: 10000,
-                direction: 'rtl'
-              });
               this.dataService.setDialogClose(true);
             });
-        }
-        else if(settings.provider == "sendgrid"){
-          let httpOptions = {
-            headers: new HttpHeaders({
-              'Content-Type':  'application/json',
-              Authorization: 'Bearer ' + settings.password
-            })};
-
-            let mail = {
-              "personalizations": [
-                {
-                  "to": [
-                    {
-                      "email": smtp_settings.targetAddress
-                    }
-                  ]
-                }
-              ],
-              "from": {
-                "email": smtp_settings.smtpServers
-              },
-              "subject": "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
-              "content": [
-                {
-                  "type": "text/plain",
-                   "value": body
-                  }
-                ]
-              }
-            
-          this.http.post(settings.server,mail,httpOptions).subscribe(data => {
-            console.log(data);
-            this.processing = false;
-            this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
-              duration: 10000,
-              direction: 'rtl'
-            });
-            this.dataService.setDialogClose(true);
-          });
-        }
+        
     }
+
 }

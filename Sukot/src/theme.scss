@@ -10,6 +10,7 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
 @mixin mix-app-theme($app-theme) {
   $primary: map-get($app-theme, primary);
   $accent: map-get($app-theme, accent);
+  $warn: map-get($app-theme,warn);
 
   .mat-button-toggle-checked {
     background-color: mat-color($primary);
@@ -21,6 +22,10 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
     border-color:mat-color($primary, default-contrast);;
     border-style: outset;
 }
+
+  .special-title{
+    color:mat-color($warn)
+  }
 
   /*.mat-button-toggle-checked {
     background-color: mat-color($accent);
