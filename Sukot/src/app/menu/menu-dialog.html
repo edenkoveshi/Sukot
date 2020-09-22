@@ -111,6 +111,15 @@
             <mat-label>מספר טלפון</mat-label>
             <input matInput type="number" value="{{contactDetails.phoneNo}}" (change)="changeContactDetails($event,'phoneNo')" required>
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>האם הפנו אותך לאתר? אם כן, מי?</mat-label>
+            <input matInput type="text" value="{{contactDetails.inviter}}" (change)="changeContactDetails($event,'inviter')">
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>הערות</mat-label>
+            <input matInput type="text" value="{{contactDetails.comment}}" (change)="changeContactDetails($event,'comment')">
+          </mat-form-field>
           <br>
           <button mat-raised-button matStepperPrevious>חזור</button>
           <button mat-raised-button color="primary" (click)="sendMailWithContactDetails()">סיום</button>

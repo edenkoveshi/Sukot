@@ -5,7 +5,8 @@ import { ViewChild } from '@angular/core'
 import db from '../../assets/db.json';
 import { DataService, MinimSet } from '../data.service'
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HttpClient,HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
+
 import '../../assets/smtp.js'
 import smtp_settings from '../../assets/smtp_settings.json';
 declare let Email: any;
@@ -20,7 +21,9 @@ const ARAVOT_PRICE:number = 5;
 export class MenuComponent implements OnInit {
   isMobile: boolean;
 
-  constructor(public dialog: MatDialog,private dataService:DataService) {}
+  constructor(public dialog: MatDialog,private dataService:DataService) {
+    
+  }
 
   openDialog() {
     const dialogRef = this.dialog.open(MenuDialog,{
@@ -72,6 +75,8 @@ export class ContactDetails{
   buildingEntrance: string;
   aptNo: number;
   phoneNo:number;
+  comment: string;
+  inviter:string;
 
   constructor(){
   }
@@ -296,7 +301,9 @@ export class MenuDialog implements OnInit {
       + "כתובת: " + this.contactDetails.street + " " + this.contactDetails.houseNo + " "
       + (this.contactDetails.buildingEntrance != undefined ? ("כניסה " + this.contactDetails.buildingEntrance) : "")
       + ",דירה " + this.contactDetails.aptNo  + " ," + this.contactDetails.city + "<br>" 
-      + "מספר טלפון: " + this.contactDetails.phoneNo + "<br>";
+      + "מספר טלפון: " + this.contactDetails.phoneNo + "<br>" + 
+      (this.contactDetails.comment != undefined ? "הערות נוספות: " + this.contactDetails.comment + "<br>" : "") +
+      (this.contactDetails.inviter != undefined ? "הוזמן לאתר על ידי: " + this.contactDetails.inviter + "<br>" : "");
 
       for(let data of this.dataSource){
         body += data.item + "*" + data.amount + " - " + data.totalPrice + "שח" + "<br>";
