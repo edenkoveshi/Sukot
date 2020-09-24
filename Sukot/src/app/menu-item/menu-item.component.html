@@ -9,10 +9,10 @@
     </mat-card-header>
     <mat-card-actions>
         <p>כשרות:</p><mat-button-toggle-group name="kashrut" appearance="legacy">
-            <mat-button-toggle *ngFor="let kashrut of this.db.KashrutTypes" value={{kashrut.type}} (change)="selectKashrut($event)">{{kashrut.type}}</mat-button-toggle>
+            <mat-button-toggle *ngFor="let kashrut of this.db.getKashrutTypes()" value={{kashrut.type}} (change)="selectKashrut($event)">{{kashrut.type}}</mat-button-toggle>
         </mat-button-toggle-group>
         <br><br>
-    <mat-radio-group *ngFor="let product of db.products" id="select-{{product.type}}">
+    <mat-radio-group *ngFor="let product of this.db.getProducts()" id="select-{{product.type}}">
         <div *ngIf="product.inSet">
         <p>בחר {{product.type}}:</p>
         <div *ngFor="let cur of product.kinds"> 

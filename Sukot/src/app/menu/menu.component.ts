@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {FormControl , Validators} from '@angular/forms';
 import { ViewChild } from '@angular/core'
-import db from '../../assets/db.json';
+//import db from '../../assets/db.json';
 import { DataService, MinimSet } from '../data.service'
+import { DatabaseService } from '../database.service'
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HttpClient} from '@angular/common/http';
 
@@ -90,7 +91,7 @@ export class MenuDialog implements OnInit {
   @ViewChild('stepper') stepper;
   dataSource: SoldItem[];
   displayedColumns: string[] = ["item","amount","price_for_each","total_price"];
-  db = db;
+  //db = db;
   AravotType1 : any;
   AravotType2 : any;
   positiveValue : FormControl;
@@ -102,10 +103,10 @@ export class MenuDialog implements OnInit {
   isMobile: boolean;
 
     constructor(private dataService:DataService,private _snackBar: MatSnackBar,
-      private http: HttpClient){
+      private db:DatabaseService){
       this.dataService.setsObservable.subscribe(sets => {
         this.allSets = sets;
-      })
+      });
     }
 
     ngOnInit(): void {
@@ -175,7 +176,7 @@ export class MenuDialog implements OnInit {
         }
       }
 
-      let res = db.KashrutTypes.filter(FilterByKashrut(kashrut))[0]
+      let res = this.db.getKashrutTypes().filter(FilterByKashrut(kashrut))[0]
       if(res){
         name = "סט "+res.type;
         price = res.price;
@@ -320,7 +321,6 @@ export class MenuDialog implements OnInit {
             Subject : "הזמנה חדשה - " + this.contactDetails.firstName + " " + this.contactDetails.lastName,
             Body : body,
             }).then( (message) => {
-              console.log(message);
               if(message != "OK"){
                 this._snackBar.open("אירעה שגיאה. אנא נסו שוב מאוחר יותר.", "", {
                   duration: 10000,
@@ -328,6 +328,7 @@ export class MenuDialog implements OnInit {
                 });
               }
               else{
+                this.db.signUpOrder(this.getTotalCost());
                 this._snackBar.open("ההזמנה בוצעה בהצלחה. שליח שלנו יצור איתך קשר בימים הקרובים. תודה רבה וחג שמח!", "", {
                   duration: 10000,
                   direction: 'rtl'
@@ -337,7 +338,6 @@ export class MenuDialog implements OnInit {
               this.processing = false;
               this.dataService.setDialogClose(true);
             });
-        
     }
 
 }

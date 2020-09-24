@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import db from '../../assets/db.json';
+//import db from '../../assets/db.json';
+import {DatabaseService} from '../database.service'
 import {DataService} from '../data.service'
 
 @Component({
@@ -9,7 +10,6 @@ import {DataService} from '../data.service'
 })
 export class MenuItemComponent implements OnInit {
 
-  db = db;
   amount: number;
   kashrut:string;
   selectedEthrog:string;
@@ -18,7 +18,7 @@ export class MenuItemComponent implements OnInit {
   setIndex: number;
   
 
-  constructor(private dataService:DataService) { 
+  constructor(private dataService:DataService,readonly db:DatabaseService) { 
     this.kashrut = "";
     this.selectedEthrog = "";
     this.selectedHadas = "";
